@@ -23,39 +23,39 @@ Read some code
     Find out the final values of eax, ebx and ecx after running the following
     instructions:
 
-    mov   ah,5Bh
-    mov   cx,0BEEFh
-    mov   ebx,ecx
-    mov   ah,bl
+    mov   ah,5Bh    # eax: 0000 5B11
+    mov   cx,0BEEFh # ecx: 5151 BEEF *
+    mov   ebx,ecx   # ebx: 5151 BEEF *
+    mov   ah,bl     # eax: 0000 EF11 *
 
 
 1.  The initial value of eax is 0x1. What is the value of eax after running the
     following instructions?
 
-    add   eax,1
-    add   eax,eax
-    add   eax,eax
+    add   eax,1   # 2
+    add   eax,eax # 4
+    add   eax,eax # 8
 
 
 2.  The initial value of eax is 0x5. What is the value of eax after running the
-    following instructions?
+    following instruc tions?
 
-    mov   ecx,eax
-    add   ecx,ecx
-    add   ecx,eax
-    add   ecx,3h
-    mov   eax,ecx
+    mov   ecx,eax # ecx: 5
+    add   ecx,ecx # ecx: A
+    add   ecx,eax # ecx: F
+    add   ecx,3h  # ecx: 12
+    mov   eax,ecx # eax: 12
 
 
 3.  What does the following piece of code does? Assume that the input of this
     code is eax, and the output is eax.
 
-    mov   edx,eax
-    add   edx,edx
-    add   edx,edx
-    add   edx,edx
-    sub   edx,eax
-    mov   eax,edx
+    mov   edx,eax # edx = eax
+    add   edx,edx # edx = eax * 2
+    add   edx,edx # edx = eax * 4
+    add   edx,edx # edx = eax * 8
+    sub   edx,eax # edx = eax * 7
+    mov   eax,edx # eax = eax * 7
 
 
 Write some code
@@ -63,6 +63,10 @@ Write some code
 
 4.  Assume that you are given values in eax,ebx,ecx. Write code that adds the
     values inside all those registers, and stores the final result inside edx.
+
+    mov edx, eax
+    add edx, ebx
+    add edx, ecx
 
 
 5.  Bonus: Write a piece of code that copies the number inside al (Only 8 bits)
@@ -73,19 +77,37 @@ Write some code
     Example: Assume that Initially eax = 0x153BCF19. When your code will end its
     running, I expect that edx = 0x00000019
 
+    sub edx, edx
+    mov dl, al
+
 
 6.  Bonus: Assume that you are given values in eax,ecx. Write a piece of code
     that calculates 5*eax + 3*ecx + 1, and stores the result inside eax. (*
     means multiplication here).
 
+    mov edx, eax
+    add edx, edx # 2
+    add edx, edx # 4
+    add edx, eax # 5
+    
+    mov ebx, ecx
+    add ebx, ebx # 2
+    add ebx, ecx # 3
+    add edx, ebx
+
+    add edx, 1
 
 7.  Bonus: You are given eax = 0x1. Could you zero eax using only ADD
     instructions? What is the lowest number of ADD instructions that you need to
     use to acheive that result.
 
+    add al, 0FFh
+
 
 8.  Bonus: Could you calculate eax * eax (eax times eax) using only MOV,ADD,SUB
     instructions?
 
+    No
+    
 
 Happy thinking :)
