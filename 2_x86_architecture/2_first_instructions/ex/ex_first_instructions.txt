@@ -85,17 +85,17 @@ Write some code
     that calculates 5*eax + 3*ecx + 1, and stores the result inside eax. (*
     means multiplication here).
 
-    mov edx, eax
-    add edx, edx # 2
-    add edx, edx # 4
-    add edx, eax # 5
+    mov ebx, eax # 1
+    add eax, eax # 2
+    add eax, eax # 4
+    add eax, ebx # 5
     
-    mov ebx, ecx
-    add ebx, ebx # 2
-    add ebx, ecx # 3
-    add edx, ebx
+    add eax, ecx # 1
+    add eax, ecx # 2
+    add eax, ecx # 3
+    
+    add eax, 1
 
-    add edx, 1
 
 7.  Bonus: You are given eax = 0x1. Could you zero eax using only ADD
     instructions? What is the lowest number of ADD instructions that you need to
@@ -108,6 +108,6 @@ Write some code
     instructions?
 
     No
-    
+
 
 Happy thinking :)
