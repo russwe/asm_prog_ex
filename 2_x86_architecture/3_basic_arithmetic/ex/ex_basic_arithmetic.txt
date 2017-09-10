@@ -32,9 +32,9 @@ Read some code
     What are the new values of edx,eax,esi after the execution of the following
     instructions:
 
-    mul   esi # edx: 00, eax: 15
-    mul   esi # edx: 00, eax: 93
-    mul   si  # edx: 06, eax: 51 *
+    mul   esi # edx: 0000, eax: 0015
+    mul   esi # edx: 0000, eax: 0093
+    mul   si  # edx: 0000, eax: 0405 *
 
 
 2.  Given that:
@@ -100,7 +100,7 @@ Read some code
         mov   ecx,eax # ecx: in
         inc   eax     # eax: in + 1
         dec   ecx     # ecx: in - 1
-        mul   ecx     # eax: (in + 1) * (in - 1) = in^2 + in - in - 1 = in^2 + 1
+        mul   ecx     # eax: (in + 1) * (in - 1) = in^2 + in - in - 1 = in^2 - 1
 
 
 Write some code
@@ -138,16 +138,16 @@ Write some code
     the result inside eax. (Here * means multiplication, and c^d means c to the
     power of d).
 
+    mov ecx, eax # ecx: a
     mul eax      # eax: a^2
-    mul eax      # eax: a^3
+    mul ecx      # eax: a^3
     mul ebx      # eax: a^3 * b
     mov ecx, eax # ecx: a^3 * b
     mov eax, ebx # eax: b
     mul eax      # eax: b^2
-    mov ebx, 5
+    mov ebx, 5   # ebx: 5
     mul ebx      # eax: 5 * b^2
     add eax, ecx # eax: a^3 * b + 5 * b^2
-    
 
 
 Happy thinking :)
