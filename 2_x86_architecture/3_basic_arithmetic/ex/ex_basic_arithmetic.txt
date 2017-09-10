@@ -21,10 +21,10 @@ Read some code
 0.  Assume that the value of eax is 0x3. What is the new value of eax after the
     execution of the following instructions:
 
-    inc   eax
-    dec   eax
-    inc   eax
-    inc   eax
+    inc   eax # 4
+    dec   eax # 3
+    inc   eax # 4
+    inc   eax # 5 *
 
 
 1.  Assume that initially:
@@ -32,9 +32,9 @@ Read some code
     What are the new values of edx,eax,esi after the execution of the following
     instructions:
 
-    mul   esi
-    mul   esi
-    mul   si
+    mul   esi # edx: 00, eax: 15
+    mul   esi # edx: 00, eax: 93
+    mul   si  # edx: 06, eax: 51 *
 
 
 2.  Given that:
@@ -42,7 +42,9 @@ Read some code
     What are the new values of edx,eax,ecx after the execution of the following
     instruction:
 
-    div   ecx
+    div   ecx # 00 : 1A, 03 /= 08 %= 02; edx = 02, eax = 08 *
+
+
 
 
 3.  Given that edx = 0x0, eax=0xAAD, ecx = 0x0,
@@ -52,6 +54,8 @@ Read some code
     div   cx
 
     Why?
+    
+    * Exception, Div by Zero, because
 
 
 4.  Read the following code and answer the questions:
@@ -61,25 +65,42 @@ Read some code
         mov   ecx,eax
         mul   ecx
 
+        * Squares the value in ecx
+
+
   4.1   Bonus: What does this piece of code do? (Input: eax, Output: eax)?
 
-        mov   ecx,eax
-        mul   ecx
-        mov   esi,eax
-        add   ecx,ecx
-        add   esi,ecx
-        inc   esi
-        mov   eax,esi
+        mov   ecx,eax # ecx <= in
+        mul   ecx     # edx: in * in (H), eax: in * in (L), ecx: in
+        mov   esi,eax # esi <= in^2
+        add   ecx,ecx # ecx: 2 * in
+        add   esi,ecx # esi: in^2 + 2 * in
+        inc   esi     # esi: in^2 + 2 * in + 1
+        mov   eax,esi # eax: in^2 + 2 * in + 1 *
 
         - Could you do the same using less instructions?
+        * Probably
+
         - What happens if eax is very large?
+        * Either exception, or loss of data (edx, high bits are lost)
+
+        mov ecx, eax # ecx <= in
+        mul eax      # eax: in^2
+        add ecx, ecx # ecx: 2 * in
+        inc ecx      # ecx: 2 * in + 1
+        add eax, ecx # eax: in^2 + 2 * in + 1 (5 lines)
+
+        !!! After doing 4.2 !!!
+        inc eax # eax: in + 1
+        mul eax # eax: (in + 1) * (in + 1) = in^2 + in + in + 1 = in^2 + 2 * in + 1
+
 
   4.2   Bonus: What does this piece of code do? (Input: eax, Output: eax)?
         
-        mov   ecx,eax
-        inc   eax
-        dec   ecx
-        mul   ecx
+        mov   ecx,eax # ecx: in
+        inc   eax     # eax: in + 1
+        dec   ecx     # ecx: in - 1
+        mul   ecx     # eax: (in + 1) * (in - 1) = in^2 + in - in - 1 = in^2 + 1
 
 
 Write some code
@@ -89,17 +110,44 @@ Write some code
   5.0   Write a piece of code that multiplies the numbers 1,2,3,4,5, and stores
         the result inside eax.
 
+        mov eax, 2
+        mov ebx, 3
+        mul ebx
+        inc ebx # 4
+        mul ebx
+        inc ebx # 5
+        mul ebx
+
+
   5.1   Write a similar piece of code which multiplies the numbers 1,2,...,10
         and stores the result inside eax.
+
+        * Seems awfully trivial, what am I missing?
 
 
 6.  You are given three numbers eax=a, ebx=b, ecx=c. Write a piece of code that
     calculates their average (a+b+c)/3, and stores it into eax.
 
+    add eax, ebx # a + b
+    add eax, ecx # a + b + c
+    mov ebx, 3
+    div ebx
+
 
 7.  Bonus: You are given eax=a, ebx=b. Calculate (a^3)*b + 5*(b^2), and store
     the result inside eax. (Here * means multiplication, and c^d means c to the
     power of d).
+
+    mul eax      # eax: a^2
+    mul eax      # eax: a^3
+    mul ebx      # eax: a^3 * b
+    mov ecx, eax # ecx: a^3 * b
+    mov eax, ebx # eax: b
+    mul eax      # eax: b^2
+    mov ebx, 5
+    mul ebx      # eax: 5 * b^2
+    add eax, ecx # eax: a^3 * b + 5 * b^2
+    
 
 
 Happy thinking :)
