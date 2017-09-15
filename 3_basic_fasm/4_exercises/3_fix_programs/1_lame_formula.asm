@@ -32,7 +32,7 @@ start:
     mov     ecx,eax
     call    read_hex    ; c
 
-    mult    ecx         ; b * c
+    mul     ecx         ; b * c
     add     eax,ebx     ; (b * c) + a
 
     ; Output the result (b * c) + a

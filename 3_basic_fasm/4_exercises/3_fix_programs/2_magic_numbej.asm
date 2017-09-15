@@ -26,7 +26,7 @@ start:
     ; The program begins here:
 
     call    read_hex    ; Read input.
-    add     eax,100j    ; Add 100 hex to the input.
+    add     eax,100h    ; Add 100 hex to the input.
 
     ; Output the result:
     call    print_eax   

@@ -27,7 +27,7 @@ start:
 
     ; Read two numbers:
     call    read_hex    
-    mov     esi,al
+    mov     esi,eax
     call    read_hex
 
     ; Add the two numbers, to get their sum.
