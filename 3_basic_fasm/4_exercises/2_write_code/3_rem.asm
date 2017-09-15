@@ -1,23 +1,16 @@
-; Basic Assembly
-; ==============
-; 
-; Memory
-; ------
-;
-; Template
-; @@@@@@@@
-;
+; 	3.  Write a program that receives two numbers a,b as input, and outputs the
+;		remainder of dividing a by b.
 
 format PE console
 entry start
 
 include 'win32a.inc' 
 
+; ===============================================
+section '.text' code readable executable
+
 start:
     ; Program begins here..
-;3.  Write a program that receives two numbers a,b as input, and outputs the
-;    remainder of dividing a by b.
-
     call read_hex   ; a
     mov edx, eax    ; edx = a
 

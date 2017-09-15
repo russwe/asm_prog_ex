@@ -1,17 +1,13 @@
-; Basic Assembly
-; ==============
-; 
-; Memory
-; ------
-;
-; Template
-; @@@@@@@@
-;
+; 	2.  Write a program that receives a number x as input, and outputs to the
+;    	console the following values: x+1, x^2 , x^3, one after another.
 
 format PE console
 entry start
 
 include 'win32a.inc' 
+
+; ===============================================
+section '.text' code readable executable
 
 start:
     ; Program begins here..

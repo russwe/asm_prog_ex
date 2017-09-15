@@ -1,17 +1,13 @@
-; Basic Assembly
-; ==============
-; 
-; Memory
-; ------
-;
-; Template
-; @@@@@@@@
-;
+;	0.  Write a program the receives three numbers and sums those three numbers.
+;		Then output the result.
 
 format PE console
 entry start
 
 include 'win32a.inc' 
+
+; ===============================================
+section '.text' code readable executable
 
 start:
     ; Program begins here.

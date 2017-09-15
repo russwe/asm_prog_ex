@@ -1,17 +1,13 @@
-; Basic Assembly
-; ==============
-; 
-; Memory
-; ------
-;
-; Template
-; @@@@@@@@
-;
+;	1.  Write a program that receives two numbers a,b and calculates their integral
+;		average.
 
 format PE console
 entry start
 
 include 'win32a.inc' 
+
+; ===============================================
+section '.text' code readable executable
 
 start:
     ; Program begins here.
