@@ -13,6 +13,7 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect?
+;       2
 ;
 ; 2.    Try to give different inputs to this program, and check the results.
 ;
@@ -23,11 +24,16 @@
 ;       the [ExitProcess] call invocation. You do not need to read the input and
 ;       output subroutines.
 ;       
+;       Compute b - a and print '1' if there was a borrow, otherwise '0'
+;
 ; 4.    Pick some random inputs and verify your predictions about what this
 ;       program does.
 ;
 ;       Question: How does this program work with signed numbers, like
 ;       0xffffffff?
+;
+;       Yes/No.  It will output correctly whether there was a lessThan or not.
+;       However, for signed numbers it should be checking overflow/underflow to have the same logical meaning.
 ;
 ; 5.    Give better names to the labels in the program, so that it would be
 ;       easier to read and understand. Make sure that the program still
@@ -44,22 +50,23 @@ section '.text' code readable executable
 start:
     ; The program begins here:
 
-    call    read_hex
-    mov     ecx,eax
-    call    read_hex
-    sub     eax,ecx
-    jc      b1
+    call    read_hex    ; a
+    mov     ecx,eax     ; ecx = a
+    call    read_hex    ; b
+    sub     eax,ecx     ; eax = b - a
+    jc      lessThan    ; if subtraction 'borrowed' -> lessThan
 
-s1:
-    mov     eax,0
-    call    print_eax
-    jmp     c1
+
+greaterOrEqual: ; non-borrow path
+    mov     eax,0       ; eax = 0
+    call    print_eax   ; print 0
+    jmp     exit        ; -> exit
     
-b1:
-    mov     eax,1
-    call    print_eax
+lessThan: ; borrow path
+    mov     eax,1       ; eax = 1
+    call    print_eax   ; print 1
 
-c1:
+exit:
     ; Exit the process:
 	push	0
 	call	[ExitProcess]

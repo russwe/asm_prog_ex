@@ -12,6 +12,8 @@
 ;
 ; 0.    Note that this program is the same as "simp cmp", except for one
 ;       instruction. Find it.
+;
+;       jc b1 -> js b1
 ; 
 ; 1.    Has the behaviour of this program changed as a result? Check some inputs
 ;       for example. If you think that the behaviour has changed, prove it by
@@ -19,6 +21,14 @@
 ;       program.
 ;
 ;       HINT: How does it work with signed numbers?
+;
+;       ffffffff
+;       0
+;       1/0
+;
+;       0
+;       ffffffff
+;       0/1
 ; 
 ; 2.    *Bonus*: Could you make this program understand comparison of signed
 ;       numbers using only the Sign Flag and the Overflow Flag? Make the
@@ -40,14 +50,19 @@ start:
     mov     ecx,eax
     call    read_hex
     sub     eax,ecx
-    js      b1
+    jo      overflow
+    js      b1          ; OF = 0, SF = 1 -> b1
+    jmp     s1          ; OF = 0, SF = 0 -> s1
 
-s1:
+overflow:
+    jns     b1          ; OF = 1, SF = 0 -> b1
+                        ; OF = 1, SF = 1 -> s1
+s1: ; b >= a
     mov     eax,0
     call    print_eax
     jmp     c1
     
-b1:
+b1: ; b < a
     mov     eax,1
     call    print_eax
 

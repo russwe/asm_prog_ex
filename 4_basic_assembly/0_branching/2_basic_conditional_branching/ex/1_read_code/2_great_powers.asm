@@ -13,6 +13,7 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect?
+;       1
 ;
 ; 2.    Try to give different inputs to this program, and check the results.
 ;
@@ -22,6 +23,8 @@
 ;       Note that the relevant part of the code is from the "start" label until
 ;       the [ExitProcess] call invocation. You do not need to read the input and
 ;       output subroutines.
+;
+;       Outputs the result of raising 2 to the input -power
 ;       
 ; 4.    Pick some random inputs and verify your predictions about what this
 ;       program does.
@@ -31,6 +34,8 @@
 ;
 ;       Is it the right output?
 ;       If not, fix the program to give back the right output.
+;
+;       Infinite Loop, and no.  Wrong output.
 
 format PE console
 entry start
@@ -43,16 +48,20 @@ section '.text' code readable executable
 start:
     ; The program begins here:
 
-    call    read_hex
-    mov     ecx,1
+    call    read_hex    ; eax = a
+    mov     ecx,1       ; ecx = 1
+
+    cmp     eax,0h      ; is the input 0?
+    jz      output      ; if so: skip straight to output
 
 lb1:
-    add     ecx,ecx
-    dec     eax
-    jnz     lb1
+    add     ecx,ecx     ; ecx = 2 * ecx // 2 4 8 16 32 64 128 ...
+    dec     eax         ; --a
+    jnz     lb1         ; a != 0 -> lb1
 
-    mov     eax,ecx
-    call    print_eax
+output:
+    mov     eax,ecx     ; eax = ecx
+    call    print_eax   ; print the result of 2^a
 
     ; Exit the process:
 	push	0
