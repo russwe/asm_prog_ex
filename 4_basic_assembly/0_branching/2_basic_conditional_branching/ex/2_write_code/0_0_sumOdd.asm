@@ -11,7 +11,7 @@ section '.text' code readable executable
 start:
     call    read_hex    ; n
     add     eax, eax    ; eax = 2n
-    add     eax, 1h     ; eax = 2n + 1
+    inc     eax         ; eax = 2n + 1
 
     mov     ecx, eax    ; ecx = 2n + 1
     mov     eax, 0h     ; eax = 0

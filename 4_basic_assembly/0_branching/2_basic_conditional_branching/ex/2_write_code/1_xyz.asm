@@ -22,13 +22,13 @@ y:
     call    read_hex    ; y
     cmp     ebx, eax    ; x < y
     mov     ebx, eax    ; ebx = y
-    jl      z
+    jb      z
     mov     ecx, 0h
 
 z:
     call    read_hex    ; z
     cmp     ebx, eax    ; y < z
-    jl      output
+    jb      output
     mov     ecx, 0h
 
 output:
