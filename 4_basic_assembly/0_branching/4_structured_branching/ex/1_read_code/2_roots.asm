@@ -16,7 +16,7 @@
 ;       Try to describe it as simply as you can. What are the numbers seen at
 ;       the outputs? What do they mean?
 ;
-;       Finds solutions to the equation: i^3 - 18d * i^2 - 168d = 0, between 1 and 10000000h ... talk about wasteful
+;       Finds solutions to the equation: i^3 - 18d * i^2 + 101d * i - 168d = 0, between 1 and 10000000h ... talk about wasteful
 ;
 ; 3.    Add comments to the code, to make it more readable.
 ; 
@@ -26,7 +26,10 @@
 ; 5.    What happens if you change the first "mov ecx,10000000h" instruction?
 ;       For example, to the number 0ffffffffh? Why?
 ;
-;       I am betting catastrophe due to overflow of edx register
+;       I am betting catastrophe due to overflow of edx register.
+
+        The official answer says slower, with more outputs... while that is likely
+        true, I don't believe all the outputs will be accurate, due to the overflow issue.
 
 format PE console
 entry start
