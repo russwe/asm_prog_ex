@@ -10,10 +10,13 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect? (Maybe non at all?)
+;       0
 ;
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. What are the numbers seen at
 ;       the outputs? What do they mean?
+;
+;       Finds solutions to the equation: i^3 - 18d * i^2 - 168d = 0, between 1 and 10000000h ... talk about wasteful
 ;
 ; 3.    Add comments to the code, to make it more readable.
 ; 
@@ -22,6 +25,8 @@
 ;
 ; 5.    What happens if you change the first "mov ecx,10000000h" instruction?
 ;       For example, to the number 0ffffffffh? Why?
+;
+;       I am betting catastrophe due to overflow of edx register
 
 format PE console
 entry start
@@ -33,32 +38,32 @@ section '.text' code readable executable
 
 start:
     
-    mov     ecx,10000000h
+    mov     ecx,10000000h   ; i
 
-looper:
-    mov     eax,ecx
-    mul     ecx     
-    mov     esi,eax
-    mul     ecx
-    mov     edi,eax
+looper: ; FOR i = 10000000h; i > 0; --i
+    mov     eax,ecx     ; eax = i
+    mul     ecx         ; edx:eax = i^2
+    mov     esi,eax     ; esi = i^2
+    mul     ecx         ; edx:eax = i^3
+    mov     edi,eax     ; edi = i^3
 
-    mov     eax,esi
-    mov     esi,18d
-    mul     esi
-    sub     edi,eax
+    mov     eax,esi     ; eax = i^2
+    mov     esi,18d     ; esi = 18d
+    mul     esi         ; edx:eax = i^2 * 18d
+    sub     edi,eax     ; edi = i^3 - i^2 * 18d
 
-    mov     eax,ecx
-    mov     ebx,101d
-    mul     ebx
-    add     edi,eax
+    mov     eax,ecx     ; eax = i
+    mov     ebx,101d    ; ebx = 101d
+    mul     ebx         ; edx:eax = i * 101d
+    add     edi,eax     ; edi = i^3 - i^2 * 18d
 
-    sub     edi,168d
+    sub     edi,168d    ; edi = i^3 - 18d * i^2 - 168d
 
-    cmp     edi,0
+    cmp     edi,0       ; IF edi == 0
     jnz     skip_print
 
-    mov     eax,ecx
-    call    print_eax
+    mov     eax,ecx     ; eax = i
+    call    print_eax   ; print i
 
 skip_print:
     loop    looper

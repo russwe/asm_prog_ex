@@ -10,6 +10,7 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect?
+;       1
 ;
 ; 2.    Try to give different inputs to this program, and check the results.
 ;
@@ -17,6 +18,8 @@
 ;       Try to describe it as simply as you can.
 ;
 ;       (Hint: Search about Perfect numbers on the web.)
+;
+;       Outputs all perfect numbers between [2,n)
 ;
 ; 4.    Add comments to the code, to make it more readable.
 ;       
@@ -39,33 +42,33 @@ section '.text' code readable executable
 
 start:
     
-    call    read_hex
-    mov     esi,eax
-    mov     ecx,2
+    call    read_hex        ; n
+    mov     esi,eax         ; esi = n
+    mov     ecx,2           ; ecx = o = 2
 
-iters:
-    mov     edi,1
-    mov     ebx,0
+iters:  ; FOR o = 2; o < n; ++o
+    mov     edi,1           ; edi = i = 1
+    mov     ebx,0           ; ebx = j = 0
 
-sum_divisors:
-    mov     eax,ecx
-    mov     edx,0
-    div     edi
+sum_divisors: ; FOR i = 1; i < o; ++i
+    mov     eax,ecx         ; eax = o
+    mov     edx,0           ; edx = 0
+    div     edi             ; IF edx:eax % i == 0
     cmp     edx,0
     jnz     non_divisible
-    add     ebx,edi
+    add     ebx,edi         ; ebx = j + i
 non_divisible:
-    inc     edi
+    inc     edi             ; IF ++i == o
     cmp     edi,ecx
     jnz     sum_divisors
 
-    cmp     ebx,ecx
+    cmp     ebx,ecx         ; IF j == o
     jnz     not_perfect
-    mov     eax,ecx
-    call    print_eax
+    mov     eax,ecx         ; eax = o
+    call    print_eax       ; print o
 
 not_perfect:
-    inc     ecx
+    inc     ecx             ; LOOP ++o != n ; !! KABOOM: 0,1,2 !! doesn't include 'n'
     cmp     ecx,esi
     jnz     iters
 

@@ -23,12 +23,16 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect?
+;       1
 ;
 ; 2.    Try to give different inputs to this program, and check the results.
 ;
 ; 3.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can.
 ;       
+;       Returns the result of: a^2 + (a-1)^2 + (a-2)^2 + ... + 2^2 + 1^2
+;                              Sum(i^2, n, 1, -1)
+;
 ; 4.    Pick some random inputs and verify your predictions about what this
 ;       program does.
 ; 
@@ -46,21 +50,21 @@ section '.text' code readable executable
 
 start:
 
-    call    read_hex
-    mov     ecx,eax
-    mov     esi,0
+    call    read_hex    ; a
+    mov     ecx,eax     ; ecx = a
+    mov     esi,0       ; esi = 0
 
-again:
-    mov     eax,ecx
-    mul     eax
-    add     esi,eax
+again:  ; FOR i=<in>; i > 0; --i
+    mov     eax,ecx     ; eax = a
+    mul     eax         ; edx:eax = a^2
+    add     esi,eax     ; esi += a^2        ; a^2 + (a-1)^2 + (a-2)^2 + ... + 2^2 + 1^2 + 0^2
     loop    again       ; The new loop instruction:
                         ; It is equivalent to those two instructions:
-                        ; dec   ecx
-                        ; jnz   again
+                        ; dec   ecx     ; --a
+                        ; jnz   again   ; !! input '0' will cause kaboom
 
     mov     eax,esi
-    call    print_eax
+    call    print_eax   ; print summation result
 
     ; Exit the process:
 	push	0
