@@ -16,12 +16,15 @@
 ; 0.    Assemble and run this program.
 ; 
 ; 1.    How many inputs does this program expect?
+;       1
 ;
 ; 2.    Try to give different inputs to this program, and check the results.
 ;
 ; 3.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can.
 ;       
+;       Sums the numbers between (0, n] which aren't evenly divisible by 5
+;
 ; 4.    Pick some random inputs and verify your predictions about what this
 ;       program does.
 ; 
@@ -43,39 +46,35 @@ include 'win32a.inc'
 ; ===============================================
 section '.text' code readable executable
 
+; edx: div-h / mod result / output
+; eax: div-l / output
+
+; ebx: total (output)
+; ecx: cur, [n, 0):-1
+; esi: div-d (5)
+
 start:
+    mov     esi,5d          ; esi = 5 (constant)
 
-    call    read_hex
-    mov     ecx,eax
+    call    read_hex        ; n
+    mov     ecx,eax         ; ecx = n (cur)
 
-    mov     ebx,0
-
+    mov     ebx,0           ; ebx = 0
 iters:
-    add     ebx,ecx
-    mov     esi,5d
-    mov     eax,ecx
-    mov     edx,0
-    div     esi
-    cmp     edx,0
-    jnz     skip1
-    jmp     discard_last
-skip1:
-come_back:
-    dec     ecx
-    jz      end_loop
-    jmp     iters
-end_loop:
-    
-    mov     eax,ebx
+    mov     edx,0           ; edx = 0
+    mov     eax,ecx         ; eax = cur
+    div     esi             ; edx = 0:cur % 5, eax = 0:cur / 5
+    cmp     edx,0           ; (no remainder)
+    je      nextIter        ; if no remainder -> nextIter
+    add     ebx,ecx         ; total += cur
+nextIter:
+    loop    iters           ; if --cur != 0 -> iters
+
+output:   
+    mov     eax,ebx         ; print total
     call    print_eax
 
-    jmp     end_prog
-discard_last:
-    sub     ebx,ecx
-    jmp     come_back
-
-end_prog:
-
+exit:
     ; Exit the process:
 	push	0
 	call	[ExitProcess]
