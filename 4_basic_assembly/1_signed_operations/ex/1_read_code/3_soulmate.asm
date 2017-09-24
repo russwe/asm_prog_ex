@@ -14,8 +14,20 @@
 ; 2.    Read the code below, and try to understand the meaning of the numbers
 ;       returned by the program.
 ;
+;       0x00000000  -> zero, negated, is zero
+;       0x80000000  -> negative number whose two's complement is the same number
+;       This number has no positive analog for a the given bitness.
+;       Thus, two's complement will always have: MaxValue = |MinValue| - 1
+;
+;       For 32-bits, those numbers are:
+;           Max:  2^31 - 1  =  2147483647
+;           Min: -2^31      = -2147483648
+;
 ; 3.    Why does it take the program so long to complete? How many iterations
-;       does the main loop goes through?
+;       does the main loop go through?
+;
+;       The *only* loop goes through ffffffff iterations. (0 is skipped)
+;       This is also why it takes so long.
 ;
 
 format PE console
