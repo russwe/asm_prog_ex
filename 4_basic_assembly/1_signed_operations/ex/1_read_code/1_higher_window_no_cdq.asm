@@ -8,9 +8,8 @@ section '.text' code readable executable
 start:
 
     call    read_hex        ; eax = a
-    mov     edx, 2
-    mul     edx             ; shift all bits left one spot
-    jnc     positive        ; yes -> positive
+    cmp     eax,0
+    jns     positive        ; a is not signed -> positive
     mov     eax,1           ; no:
     call    print_eax       ; output 1
     jmp     end_if

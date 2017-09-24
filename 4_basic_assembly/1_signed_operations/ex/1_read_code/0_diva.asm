@@ -59,14 +59,14 @@ start:
 
     mov     eax,esi
     ; START cdq
-    mov     edx,2
-    mul     edx
-    jc      negExtend
+    mov     edx,2       ; Simpler solution (from answer):
+    mul     edx         ; cmp  eax,0
+    jc      negExtend   ; js   negExtend
 posExtend:
     mov     edx,00000000h
     jmp     continue
 negExtend:
-    mov     edx,80000000h
+    mov     edx,ffffffffh
 continue:
     mov     eax,esi
     ; END cdq

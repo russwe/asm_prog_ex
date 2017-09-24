@@ -11,6 +11,9 @@
 ; 
 ; 1.    What are the numbers found by the program? Try to guess.
 ;
+;       0x00000000
+;       0x80000000
+; 
 ; 2.    Read the code below, and try to understand the meaning of the numbers
 ;       returned by the program.
 ;

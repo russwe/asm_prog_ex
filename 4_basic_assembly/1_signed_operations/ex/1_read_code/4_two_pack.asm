@@ -19,7 +19,7 @@
 ; 3.    Read the program's code below, and try to understand what does it do. Try
 ;       to describe it as simply as you can.
 ;       
-;       sign-extends and multiplies the low and high 4 bits of the input
+;       sign-extends and multiplies the low and high 4 bits (nibbles) of the input
 ;       and returns the result
 ;
 ; 4.    Pick some random inputs and verify your predictions about what this
@@ -27,6 +27,9 @@
 ;
 ; 5.    Describe what happens for input ff01 against what happens for input
 ;       01ff.
+;
+;       ff * 01 = ffffffff
+;       01 * ff = ffffffff
 ;
 
 format PE console
