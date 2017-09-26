@@ -1,8 +1,10 @@
 [CmdletBinding()]
 param(
     [Alias('Path')]
-    [Parameter(Mandatory)]
-    [string] $FullName
+    [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+    [string[]] $FullName
 )
 
-(Get-Content $FullName |? { $_ -notmatch '^(?:\s*(?:;|\w+\:)|\s*$)' }).Count
+PROCESS {
+    @($FullName) |% { [pscustomobject] @{ Path = $_ ; LineCount = @(Get-Content $_ |? { $_ -notmatch '^(?:\s*(?:;|\w+\:)|\s*$)' }).Count } }
+}
