@@ -34,7 +34,7 @@ END {
         @($_) |% { Write-Host -NoNewline -Fore Yellow "$_ " }
         Write-Host
 
-        @($_) |% { $_ | & $ExeFilePath }
+        @($_) | & $ExeFilePath
         Write-Host
     }   
 }
