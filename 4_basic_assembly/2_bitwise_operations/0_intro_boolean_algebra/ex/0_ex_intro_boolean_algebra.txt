@@ -228,8 +228,18 @@ V - OR
 
           HINT: Use the solution of question 5.0.
 
-          a^!bVb^!a
-          (!aVb)^(!bVa)
+          aVb -> !(!a^!b) -> ((a+1)^(b+1))+1
+          > a^(b+c) = (a^b)+(a^c)
+          ((a+1)^(b+1))+1 -> ((a+1)^b)+((a+1)^1)+1 -> ((a+1)^b)+(a+1)+1
+          > a^(b+c) = (a^b)+(a^c)
+          ((a+1)^b)+(a+1)+1 -> ((b^a)+(b^1))+(a+1)+1 -> ((b^a)+b)+(a+1)+1
+          ((b^a)+b)+(a+1)+1 -> ((b^a)+b)+a
+
+          ab      aVb   ((a+1)^(b+1))+1   ((b^a)+b)+a
+          00      0     0                 0
+          01      1     1                 1
+          10      1     1                 1
+          11      1     1                 1
 
     5.3   Infer that every expression that can be represented using V,^,! could
           be represented using +(XOR),^ and the number 1.
@@ -303,10 +313,14 @@ V - OR
     (aVb)^(!((!a)^(!b))) -> aVb ^ aVb -> aVb
 
     6.2   (!((a^b)V(!c)))+c
-    (!((a^b)V(!c)))+c -> (aVb ^ c) + c -> note, *^c can only be true when c is.  c + c -> 0
+    (!((a^b)V(!c)))+c -> !(a^b) ^ c + c -> !aV!b ^ c + c
+    !aV!b ^ 0 + 0 V !aV!b ^ 1 + 1
+    0             V !(!aV!b)
+    0             V a^b
+    a^b^c
 
     6.3   (b^(!(a^b)))Va
-    ab      !(a^b)      (b^(!(a^b)) (b^(!(a^b)))Va
+    ab      !(a^b)      !(a^b)^c    !(a^b)^c+c
     00      1           0           0
     01      1           1           1
     10      1           0           1
