@@ -160,6 +160,13 @@ expected.
           1 + 0 = 01
           And indeed: 0 = 1 AND 0, 1 = 1 XOR 0.
 
+          ab      a^b   a+b
+          00      0     0
+          01      0     1
+          10      0     1
+          11      1     0
+
+          Truth table looks good to me.
 
     8.1   Write a program that gets as inputs two numbers x,y (Each of size 4
           bytes), and calculates their arithmetic sum x+y using only bitwise
