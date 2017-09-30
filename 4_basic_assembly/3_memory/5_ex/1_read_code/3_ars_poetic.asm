@@ -12,10 +12,17 @@
 ; 1.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Prints the bytestream of the assembled program
+;       (at least, the bits between start and end_prog)
+;
 ; 2.    Explain the program's output.
+;
+;       The output is itself, assembled
 ;
 ; 3.    Open the executable in a hex editor, and try to find the output inside
 ;       the hex data.
+;
+;       This is trivial, simply find the start of the '.text' section >.>
 ;
 ; 4.    How can you change the program so that it will also apply to the code
 ;       inside training.inc ?

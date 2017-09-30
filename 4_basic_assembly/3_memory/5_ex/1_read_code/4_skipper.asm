@@ -12,7 +12,12 @@
 ; 1.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Outputs the values in my_data (showing that code/data can be interchangble)
+;
 ; 2.    Explain the program's output.
+;
+;       Outputs the data from the 'code' section skipped at the start of the file
+;       (Why didn't we just cram that data at the end?)
 ;
 
 format PE console

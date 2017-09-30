@@ -14,6 +14,8 @@
 ;
 ; 2.    Explain the program's output.
 ;
+;       Returns the DWORD from the array with the highest (max) value.
+;
 ; 3.    Note the trick which allows to find out the size of the array at
 ;       assembly time. Try to add the element 21h to the array, and make sure
 ;       that you get the expected behaviour from the new program.
@@ -33,8 +35,8 @@ section '.data' data readable writeable
     ; (See code below)
 
     ; Here we define some consecutive dwords:
-    my_nums   dd  1,6,3,2,11h,3,9,17h,5h,14h
-    my_nums_end:
+    my_nums   dd  1,6,3,2,11h,3,9,17h,5h,21h,14h
+    my_nums_end:                                ; neat trick
 
     ; In this manner we could add new numbers to the array, and our code will
     ; keep working.
