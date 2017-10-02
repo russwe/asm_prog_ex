@@ -12,11 +12,18 @@
 ; 1.    How many inputs does this program require? 
 ;       Try to give the program some inputs, and check out the results. 
 ;
+;       4: v1(x,y) v2(x,y)
+;
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Adds two, 2D vectors together and returns the result.
+;
 ; 3.    Explain: Why is the bss section being used in this program, and not the
 ;       data section?
+;
+;       Why take up disk space in the program when we don't know what the correct
+;       values are yet, anyway?
 
 format PE console
 entry start

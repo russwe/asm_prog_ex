@@ -12,11 +12,38 @@
 ; 1.    How many inputs does this program require? 
 ;       Try to give the program some inputs, and check out the results. 
 ;
+;       2: User's x,y coords.
+;
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Returns the distance (squared) to the nearest restroom, and the x,y coords of same.
+;
 ; 3.    Try to draw the city's map.
 ;
+;   x
+; y 00 01 02 03 04 05 06 07 08 09 10 11
+; 00 
+; 01
+; 02
+; 03            rr       rr
+; 04
+; 05
+; 06         rr             rr
+; 07            rr       rr
+; 08               rr rr
+; 09
+; 10
+;
+
+    bathrooms   COORD    4,3
+                COORD    7,3
+                COORD    3,6
+                COORD    8,6
+                COORD    4,7
+                COORD    7,7
+                COORD    5,8
+                COORD    6,8
 
 format PE console
 entry start
@@ -55,7 +82,7 @@ section '.bss' readable writable
 
     user_location               COORD   ?
     closest_bathroom_index      dd      ?
-    closest_bathroom_dist       dd      7fffffffh ; "Infinity"
+    closest_bathroom_dist       dd      7fffffffh ; "Infinity" !! er, no, just the biggest possible positive number for a DWORD
     
 ; ===============================================
 section '.text' code readable executable

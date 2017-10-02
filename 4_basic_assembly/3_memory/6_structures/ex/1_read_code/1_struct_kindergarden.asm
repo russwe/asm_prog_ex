@@ -55,21 +55,21 @@ start:
     ; PNT structure:
     ; ------------------
     mov     eax,my_point
+    call    print_eax       ; BSS start
+
+    mov     eax,my_point.x  ; BSSs + 0
     call    print_eax
 
-    mov     eax,my_point.x
+    mov     eax,my_point.y  ; BSSs + 1
     call    print_eax
 
-    mov     eax,my_point.y
+    mov     eax,sizeof.PNT  ; 2
     call    print_eax
 
-    mov     eax,sizeof.PNT
+    mov     eax,PNT.x       ; 0
     call    print_eax
 
-    mov     eax,PNT.x
-    call    print_eax
-
-    mov     eax,PNT.y
+    mov     eax,PNT.y       ; 1
     call    print_eax
 
     ; Prove the following: my_point + PNT.y == my_point.y
@@ -79,16 +79,16 @@ start:
     ; LINE structure:
     ; --------------------
 
-    mov     eax,sizeof.LINE
+    mov     eax,sizeof.LINE         ; 4
     call    print_eax
 
-    mov     eax,my_line
+    mov     eax,my_line             ; BSSs + 2
     call    print_eax
 
-    mov     eax,my_line.p_end.x
+    mov     eax,my_line.p_end.x     ; BSSs + 2 + 2
     call    print_eax
 
-    mov     eax,LINE.p_end.x
+    mov     eax,LINE.p_end.x        ; 2
     call    print_eax
 
     ; Prove the following: my_line + LINE.p_end.x == my_line.p_end.x
@@ -99,13 +99,13 @@ start:
     ; -----------------------
 
     ; Try to predict the following offsets:
-    mov     eax, COLORED_LINE.cline
+    mov     eax, COLORED_LINE.cline             ; 4
     call    print_eax
 
-    mov     eax, COLORED_LINE.cline.p_end
+    mov     eax, COLORED_LINE.cline.p_end       ; 6
     call    print_eax
 
-    mov     eax, COLORED_LINE.cline.p_end.y
+    mov     eax, COLORED_LINE.cline.p_end.y     ; 7
     call    print_eax
 
 

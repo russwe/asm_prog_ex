@@ -84,27 +84,27 @@ start:
     ; ---------------------------
 
     ; Compare the following two values:
-    mov     eax,UNI_COLORED_LINE.red
+    mov     eax,UNI_COLORED_LINE.red    ; 0
     call    print_eax
 
-    mov     eax,UNI_COLORED_LINE.color
+    mov     eax,UNI_COLORED_LINE.color  ; 0
     call    print_eax
 
     ; And also compare the following two values:
-    mov     eax,my_u_line.red
+    mov     eax,my_u_line.red           ; BSSs + 0 + 0
     call    print_eax
 
-    mov     eax,my_u_line.color
+    mov     eax,my_u_line.color         ; BSSs + 0 + 0
     call    print_eax
 
 
     mov     dword [my_u_line.color],11223344h
     ; Predict the following values:
-    movzx   eax,byte [my_u_line.red]
+    movzx   eax,byte [my_u_line.red]    ; 44
     call    print_eax
-    movzx   eax,byte [my_u_line.green]
+    movzx   eax,byte [my_u_line.green]  ; 33
     call    print_eax
-    movzx   eax,byte [my_u_line.blue]
+    movzx   eax,byte [my_u_line.blue]   ; 22
     call    print_eax
 
     ; Print a delimiter.
@@ -115,13 +115,13 @@ start:
     ; -----------------------
 
     ; Predict the following values:
-    mov     eax,INDEXED_LINE.red
+    mov     eax,INDEXED_LINE.red                ; 4
     call    print_eax
 
-    mov     eax,sizeof.INDEXED_LINE
+    mov     eax,sizeof.INDEXED_LINE             ; 12d = c
     call    print_eax
 
-    mov     eax,INDEXED_LINE.cline.p_start.y
+    mov     eax,INDEXED_LINE.cline.p_start.y    ; 9
     call    print_eax
 
 

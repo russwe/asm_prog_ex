@@ -67,19 +67,19 @@ section '.text' code readable executable
 
 start:
     ; Predict all the following printed values:
-    mov     eax,COOL.x
+    mov     eax,COOL.x  ; 0
     call    print_eax
 
-    mov     eax,COOL.y
+    mov     eax,COOL.y  ; 4
     call    print_eax
 
     ; Print a delimiter:
     call    print_delimiter
 
-    mov     eax,COOLER.x
+    mov     eax,COOLER.x    ; 0
     call    print_eax
 
-    mov     eax,COOLER.y
+    mov     eax,COOLER.y    ; 0
     call    print_eax
 
 
