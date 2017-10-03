@@ -23,8 +23,13 @@
 ;       Make a small modification in the source code below so that the input a,a
 ;       will return the correct result.
 ;
+;       0.  Lucky result, since '10' is not in the table as either a row, or a column
+;
 ; 2.    Try to give the program an input of two very large numbers. Example:
 ;       10000,10000. What happens? Why?
+;
+;       Kersplode.  We finally reached a page we didn't have read (write?) access to.
+;       (I'm betting on write access, since .text should follow .bss)
 ;
 
 format PE console
@@ -32,8 +37,8 @@ entry start
 
 include 'win32a.inc' 
 
-WIDTH = 10
-HEIGHT = 10
+WIDTH  = 11 ; 0 .. 10
+HEIGHT = 11 ; 0 .. 10
 ; ===============================================
 section '.bss' readable writeable
     ; Declare the uninitialized table in memory:
@@ -45,43 +50,44 @@ section '.text' code readable executable
 start:
     ; Fill in the multiplication table:
     ; ---------------------------------
-    mov     esi,mul_tbl ; Cell ptr.
-    mov     ecx,0   ; row counter.
+    mov     esi,mul_tbl         ; Cell ptr.
+    mov     ecx,0               ; Row counter.
 
 next_row:
-    mov     ebx,0   ; Column counter.
+    mov     ebx,0               ; Column counter.
 next_column:
-    mov     eax,ecx
-    mul     ebx
-    mov     dword [esi],eax
+    mov     eax,ecx             ; eax = row #
+    mul     ebx                 ; edx:eax = (row #) * (col #)
+    mov     dword [esi],eax     ; [esi] = eax (low dword of result)
 
-    add     esi,4
-    inc     ebx
-    cmp     ebx,WIDTH
+    add     esi,4               ; esi += 4  // move to the next DWORD in the array
+    inc     ebx                 ; ebx++
+    cmp     ebx,WIDTH           ; ebx != WIDTH
     jnz     next_column
 
-    inc     ecx
-    cmp     ecx,HEIGHT
+    inc     ecx                 ; ecx++
+    cmp     ecx,HEIGHT          ; ecx != HEIGHT
     jnz     next_row
 
     ; We read coordinates inside the table as input,
     ; And then print back the contents of the relevant cell:
     ; ------------------------------------------------------
 
-    call    read_hex  ; Column
-    mov     ebx,eax
-    call    read_hex  ; Row
-    mov     ecx,eax
+    call    read_hex            ; Column
+    mov     ebx,eax             ; ebx = col
 
-    mov     edi,WIDTH*4
-    mul     edi
-    lea     eax,[eax + ebx*4]
-    mov     esi,mul_tbl
+    call    read_hex            ; Row   
+    mov     ecx,eax             ; ecx = eax = row
 
-    mov     eax,dword [esi+eax]
+    mov     edi,WIDTH*4         ; edi = WIDTH*4  // row offset: 4 is the size of a DWORD/cell in the table
+    mul     edi                 ; edx:eax = eax * rowOffset
+    lea     eax,[eax + ebx*4]   ; eax = (row * rowOffset) + col * 4  // again, 4 is the DWORD/cell size
+    mov     esi,mul_tbl         ; esi = mul_tbl
+
+    mov     eax,dword [esi+eax] ; eax = [ mul_tbl + (row * rowOffset) +(col * 4) ]
     call    print_eax
 
-
+exit:
     ; Exit the process:
     push    0
     call    [ExitProcess]

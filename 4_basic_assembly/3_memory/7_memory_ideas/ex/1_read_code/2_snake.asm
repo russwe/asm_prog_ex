@@ -11,17 +11,29 @@
 ;
 ; 1.    How many inputs does this program require? 
 ;       Try to give the program some inputs, and check out the results. 
+;       1
 ;
 ;       How does the output look like? What does it mean?
 ;
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Indexes into world, using th indexed location as the next index to jump to.
+;       Continues jumping until the starting index is reached again.
+;
 ; 3.    What is special about the data array world? Could you create a data
 ;       array with the same special property yourself?
 ;
-; 4*.   Bonus: How many data arrays like world of a fixed length n exist?
+;       No matter where you start, it takes 100 jumps to get back to the start.
+;       Sure.
+;       - [0]
+;       - [1,0]
+;       - [1,2,0];[2,0,1]
+;       - [1,2,3,0];[2,3,0,1];[3,0,1,2]
+;       - ...
 ;
+; 4*.   Bonus: How many data arrays like world of a fixed length n exist?
+;       n - 1, where n > 1; 1 when n = 1
 
 format PE console
 entry start
