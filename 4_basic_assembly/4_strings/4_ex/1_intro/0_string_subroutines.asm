@@ -11,16 +11,16 @@
 ; strings and print strings to the console. Both of those subroutines are
 ; written inside the training.inc include file.
 ;
-; -     print_str: This subroutine writes to the console the string pointer by the
+; -     print_str: This subroutine writes to the console the string pointed to by the
 ;       esi register. It continues to print until it encounters a null
-;       terminator, so be sure to add a null terminator in the end of your
+;       terminator, so be sure to add a null terminator to the end of your
 ;       strings.
 ;
 ; -     read_line: This subroutine reads one line from the console, and writes
 ;       it to memory, beginning from address edi. In ecx you should specify the
 ;       maximum amount of bytes that you are willing to read. This is important,
 ;       as usually you only have a limited space in your buffer. Any byte beyond
-;       the first ecx bytes will be discarded.
+;       the first ecx-1 bytes will be discarded (you need one byte for null-termination).
 ;
 ; Note that both of those subroutines do not change the registers.
 ;
@@ -46,7 +46,7 @@ MAX_USER_STR = 20h
 
 ; ===============================================
 section '.data' data readable writeable
-    ex_str          db      'Example string.',0
+    ex_str          db      'Example string. ',0
     please_enter    db      'Please enter a string:',13,10,0
 
 section '.bss' readable writeable
