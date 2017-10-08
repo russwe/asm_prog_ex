@@ -15,10 +15,21 @@
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Gets string len
+;       Scans from the start of the string for '['
+;       Scans from teh back fo the string for ']'
+;       Replaces ']' with 0x0h
+;       Outputs string starting one char after '['
+;
 ; 3.    Explain the program's output.
+;
+;       Contents after the first '[' and before either the last ']' or the end of string.
 ;
 ; 4.    What happens if we give the program an input of the form 
 ;       1234[5678, or 789324]12345 ?
+;
+;       no closing bracket: everything from opening bracket to end
+;       no opening bracket: empty string
 ;
 ;       Modify the program to handle those cases. Think about apropriate
 ;       messages that should be printed to the user.
@@ -32,7 +43,7 @@ include 'win32a.inc'
 MAX_USER_TEXT = 40h
 
 ; ===============================================
-section '.data' data readable writeable
+section '.const' data readable
     string_emp  db      'Sorry, you gave me an empty string...',13,10,0
 
     enter_text  db      'Please enter text:',13,10,0
@@ -61,7 +72,7 @@ start:
     mov     edi,user_text
     mov     ecx,MAX_USER_TEXT
     xor     al,al
-    repnz scasb
+    repnz   scasb   ; New instructions; repnz: repeat (--CX) not zero and !ZF, scasb: Scan String (EDI++/--)
 
     neg     ecx
     add     ecx,MAX_USER_TEXT

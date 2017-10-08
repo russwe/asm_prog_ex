@@ -14,8 +14,11 @@
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Does a lexographic comparison of two strings,byte by byte
+;
 ; 3.    Explain the program's output.
 ;
+;       Text saying which string is lexographically greater, or if they are equal
 
 format PE console
 entry start
@@ -25,7 +28,7 @@ include 'win32a.inc'
 MAX_STR = 40h
 
 ; ===============================================
-section '.data' data readable writeable
+section '.const' data readable
     enter_first     db      'Please enter the first string: ',0
     enter_second    db      'Please enter the second string: ',0
 
@@ -69,7 +72,7 @@ start:
 next_byte:
     mov     dl,byte [esi]
     cmpsb
-    jz      chars_equal
+;   jz      chars_equal     ; !! not needed, this is the fall-through
     ja      first_bigger
     jb      second_bigger
 
@@ -84,9 +87,8 @@ first_bigger:
     
 second_bigger:
     mov     eax,second_greater
+
 finish_cmp:
-
-
     ; Print the result:
     mov     esi,eax
     call    print_str

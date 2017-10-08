@@ -16,8 +16,15 @@
 ;
 ; 3.    Explain the program's output.
 ;
+;       Scans the input stream and accumulates a grade:
+;       - for 'a', add 1
+;       - for 'A', add 3
+;       - otherwise, no change
+;
 ; 4.    What is the highest grade that could be obtained using this program?
 ;       Which input gives it?
+;
+;       63+ (40h) "A"s = 126 (7e)
 ;
 
 format PE console

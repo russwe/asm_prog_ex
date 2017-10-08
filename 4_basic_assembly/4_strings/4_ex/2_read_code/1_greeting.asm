@@ -16,6 +16,7 @@
 ;
 ; 3.    Explain the program's output.
 ;
+;       Reads the user's <name> and outputs: "Hello <name>, how are you today?"
 
 format PE console
 entry start
@@ -26,7 +27,7 @@ MAX_NAME_LEN = 10
 GREETING_MAX = HELLO_SIZE + MAX_NAME_LEN + HOW_ARE_SIZE + 1
 
 ; ===============================================
-section '.data' data readable writeable
+section '.const' data readable
     please_enter    db  'Please enter your name:',13,10,0
     hello           db  'Hello ',0
     HELLO_SIZE = $ - hello - 1

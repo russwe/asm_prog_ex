@@ -16,6 +16,8 @@
 ;
 ; 3.    Explain the program's output.
 ;
+;       A right-triangle with sides 'a' and 'b' equal to the requested size
+;
 ; 4.    Make a modification to the program, to reverse the picture that is being
 ;       drawn. (Reverse it vertically).
 ;
@@ -27,8 +29,8 @@ include 'win32a.inc'
 
 
 ; ===============================================
-section '.data' data readable writeable
-    enter_size  db  'Enter wanted size: ',0
+section '.const' data readable
+    enter_size  db  'Enter desired size: ',0
     star        db  '*',0
     newline     db  13,10,0
 
@@ -42,9 +44,11 @@ start:
 
     ; Read size from user:
     call    read_hex
-
+    mov     ebx, eax
+    inc     ebx
 draw_line:
-    mov     ecx,eax
+    mov     ecx,ebx
+    sub     ecx,eax
 one_star:
     ; Print one star:
     mov     esi,star
