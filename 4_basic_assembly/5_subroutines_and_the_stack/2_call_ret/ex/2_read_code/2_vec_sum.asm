@@ -22,11 +22,14 @@
 ;
 ; 4.    Explain the program's output.
 ;
+;       sums the vectors in vec_list and outputs the x and y values of the summed vector
+;
 ; 5.    Question for thought: How can you check that this program works right,
 ;       without verifying the full calculation yourself?
 ;       
 ;       HINT: How could you acheive it by a small change to the program?
 ;
+;       You could verify smaller vector sets with known results... (data changes)
 
 format PE console
 entry start

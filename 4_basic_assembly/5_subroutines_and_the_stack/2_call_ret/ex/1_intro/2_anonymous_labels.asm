@@ -41,6 +41,9 @@
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Accepts input 'n'
+;       Computes sum(0,n,x) and outputs whether or not this value equals 'a'
+;
 ; 3.    Note the use of anonymous labels in the code.
 ;
 ; 4.    Explain the program's output.

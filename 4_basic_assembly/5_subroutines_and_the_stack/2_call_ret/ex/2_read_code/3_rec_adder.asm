@@ -20,8 +20,12 @@
 ;
 ; 3.    Explain the program's output.
 ;
+;       The sum of two inputted numbers
+;
 ; 4.    Try to give the program large numbers as input. What happens? Why?
 ;       Evaluate the size of the stack using this experiment.
+;
+;       Stack overflow (kaboom)
 ;
 ; NOTE: 
 ;       The technique employed in this code where a function calls itself is

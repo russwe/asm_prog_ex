@@ -18,7 +18,11 @@
 ; 3.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       subroutines to print a full line, a "hollow line" (part of the body), and one which calls the prior two to create a square
+;
 ; 4.    Explain the program's output.
+;
+;       Outputs a hollow square of the reqested size.
 ; 
 ; 5.    - Create a new function called print_rect. This function will take as
 ;       arguments: ecx as height, and edx and width. It will then print a
@@ -56,15 +60,60 @@ section '.text' code readable executable
 start:
     mov     esi,enter_wanted
     call    print_str
-
+    
     call    read_hex
     mov     ecx,eax
     call    print_square
+
+    call    print_str
+
+    call    read_hex
+    mov     edx, eax
+    call    print_rect
 
     ; Exit the process:
 	push	0
 	call	[ExitProcess]
 
+; ======================================================
+; Input:
+;   ecx -- Height (ecx >= 2)
+;   edx -- Width  (edx >= 2)
+; Operation:
+;   Prints a rectable made of stars of H ecx and W edx to the console.
+;
+print_rect:
+    cmp     edx,2
+    jb      .end_fast
+
+    push    eax
+    push    ecx
+    push    edx
+
+    mov     eax,edx
+    mov     edx,ecx    ; edx = H
+    mov     ecx,eax    ; ecx = W
+
+    call    print_full_line
+
+    sub     edx,2
+    test    edx,edx
+    jz      .after_hollows
+
+.hollows:
+    ; Print hollow lines:
+    call    print_hollow_line
+    dec     edx
+    jnz     .hollows
+
+.after_hollows:
+    call    print_full_line
+
+    pop     edx
+    pop     ecx
+    pop     eax
+.end_fast:
+    ret
 
 ; ======================================================
 ; Input:
@@ -73,30 +122,12 @@ start:
 ;   Prints a square made of stars of size ecx to the console.
 ;
 print_square:
-    push    edi         ; Keep edi.
-    cmp     ecx,2
-    jb      .end_func
-
-    mov     edi,ecx     ; Save a copy of ecx.
-
-    ; Print first full line:
-    call    print_full_line
-
-    sub     edi,2
-    test    edi,edi
-    jz      .after_hollows
-.hollows:
-    ; Print hollow lines:
-    call    print_hollow_line
-    dec     edi
-    jnz     .hollows
-.after_hollows:
-
-    ; Print last full line:
-    call    print_full_line
+    push    edx
     
-.end_func:
-    pop     edi         ; Restore edi.
+    mov     edx, ecx
+    call    print_rect
+
+    pop     edx         ; Restore edi.
     ret
 
 ; ========================================================
@@ -110,8 +141,8 @@ print_full_line:
     push    esi
 
     ; Print a line of stars:
-.next_star:
     mov     esi,star
+.next_star:
     call    print_str
     loop    .next_star
 
@@ -143,8 +174,8 @@ print_hollow_line:
     ; Print spaces:
     sub     ecx,2
     jecxz   .after_spaces
-.next_space:
     mov     esi,space
+.next_space:
     call    print_str
     loop    .next_space
 .after_spaces:

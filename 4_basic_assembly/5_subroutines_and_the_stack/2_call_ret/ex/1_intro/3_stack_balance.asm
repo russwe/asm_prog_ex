@@ -51,12 +51,7 @@ section '.data' data readable writeable
 section '.text' code readable executable
 
 start:
-
-    ; Print the value of esp:
-    mov     esi,cur_esp
-    call    print_str
-    mov     eax,esp
-    call    print_eax
+    call    print_esp
 
     ; Find maximum using get_max:
     mov     esi,my_arr
@@ -64,11 +59,7 @@ start:
     call    get_max
     call    print_eax
 
-    ; Print again the value of esp:
-    mov     esi,cur_esp
-    call    print_str
-    mov     eax,esp
-    call    print_eax
+    call    print_esp
 
     ; Exit the process:
 	push	0
@@ -98,6 +89,20 @@ get_max:
     jnz     .iter
     pop     edx         ; Restore edx from stack.
 .end_func:
+    ret
+
+print_esp:
+    push    esi
+    push    eax
+
+    mov     esi,cur_esp
+    call    print_str
+    mov     eax,esp
+    sub     eax, 8      ; account for the stack space used by this method
+    call    print_eax
+
+    pop     eax
+    pop     esi
     ret
 
 include 'training.inc'

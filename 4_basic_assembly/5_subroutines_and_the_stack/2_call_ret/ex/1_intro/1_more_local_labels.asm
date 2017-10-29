@@ -18,6 +18,10 @@
 ; 3.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Accepts input 'n'
+;       Computes and displays sum(0,n,x)
+;       Computes and displays sum(0,n,x^2)
+;
 ; 4.    Explain the program's output.
 ;
 ; 5.    Note that we use the same local label name '.sum_loop' twice.
@@ -77,7 +81,6 @@ start:
 
 ; Note that calc_sum is a global label.
 calc_sum:
-    push    ecx     ; Save ecx to stack.
     xor     eax,eax
     jecxz   .loop_done  ; Refers to calc_sum.loop_done.
     ; NOTE: .sum_loop is a local label.
@@ -88,7 +91,6 @@ calc_sum:
     ; note: .loop_done is a local label.
     ; its full name is 'calc_sum.loop_done'.
 .loop_done:
-    pop     ecx         ; Restore ecx from stack.
     ret
 
 ; ===============================================================
@@ -101,7 +103,7 @@ calc_sum:
 
 ; Note that calc_sum_squares is a global label.
 calc_sum_squares:
-    push    ecx     ; Save registers to stack.
+    ; Save registers to stack.
     push    edi
     push    edx
 
@@ -119,9 +121,9 @@ calc_sum_squares:
 .loop_done:
     mov     eax,edi
 
-    pop     edx         ; Restore registers from stack.
+    ; Restore registers from stack.
+    pop     edx
     pop     edi
-    pop     ecx
     ret
 
 include 'training.inc'

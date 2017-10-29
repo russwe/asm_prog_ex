@@ -39,7 +39,14 @@
 ;       Pay special attention to the strange use of the RET instruction.
 ;       Try to understand exactly what happens.
 ;
+;       Really more of a trampoline.  The addres of ".print_visible" is put on the stack
+;       and then we RETurn to it... thus skipping the code in between and continuing on to [ExitProcess]
+;
 ; 2.    Explain the program's output.
+;
+;       Outputs:
+;           Welcome to the Catapult program.
+;           I can be seen!
 ;
 
 format PE console

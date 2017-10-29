@@ -39,6 +39,9 @@
 ; 2.    Read the program's code below, and try to understand what does it do. 
 ;       Try to describe it as simply as you can. Add comments if needed.
 ;
+;       Reads input 1, outputs if it was 3 (or not)
+;       Reads input 2, outputs if it was 3 (or not)
+;
 ; 3.    Explain the program's output.
 ;
 ; 4.    Note that we have 2 local labels with the name .eax_is_3, and two local
