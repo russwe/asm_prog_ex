@@ -76,11 +76,39 @@ start:
 ; Output:
 ;   (v1.x * v2.x) + (v1.y * v2.y)
 ; Calling Covention:
-;   ?
+;   STDCALL
 ;
 
 ; **** Fill in this function ****
-; scalar_product:
+scalar_product:
+    push    ebp
+    mov     ebp, esp
 
+    push    ebx
+    push    edx
+
+    mov     eax, dword [ebp + 8 + 0]
+    mov     eax, dword [eax + VEC.x]
+
+    mov     edx, dword [ebp + 8 + 4]
+    mov     edx, dword [edx + VEC.x]
+
+    imul    edx
+    mov     ebx, eax
+
+    mov     eax, dword [ebp + 8 + 0]
+    mov     eax, dword [eax + VEC.y]
+    
+    mov     edx, dword [ebp + 8 + 4]
+    mov     edx, dword [edx + VEC.y]
+
+    imul    edx
+    add     eax, ebx
+
+    pop     edx
+    pop     ebx
+
+    pop     ebp
+    ret     8
 
 include 'training.inc'

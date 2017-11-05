@@ -39,15 +39,22 @@ start:
 
     ; Copy src_data into dest_data:
 
-    ; *** FILL IN YOUR CODE HERE ***
-    ;
-    ; call  copy_data
-    ;
-    ; ******************************
+    mov     eax, esp
+    call    print_eax
+
+    push    SRC_DATA_LEN
+    push    src_data
+    push    dest_data
+    call    copy_data
+    add     esp, 0ch
+
+    mov     eax, esp
+    call    print_eax
 
     ; Print dest_data to console:
     mov     esi,dest_data
     call    print_str
+
 
     ; Exit the process:
 	push	0
@@ -58,7 +65,7 @@ start:
 ; copy_data(dest,src,length)
 ;
 ; Calling convention: 
-;   ?
+;   CDECL
 ; Operation:
 ;   Copy a data buffer.
 ; Input:
