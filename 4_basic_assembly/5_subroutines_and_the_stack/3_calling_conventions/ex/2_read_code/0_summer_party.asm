@@ -21,9 +21,13 @@
 ; 3.    A function of this type is called a Variadic function. 
 ;
 ;       - Which calling convention is being used: STDCALL or CDECL?
+;           STDCALL
 ;
 ;       - Is it possible to get a Variadic function using the other calling
 ;         convention?
+;           Sure, but not any we covered.  STDCALL allows the caller to clean up the stack
+;           and only the caller knows how many inputs were added to the stack.
+;           (RET does not take a register for the value to clean up)
 ;
 
 format PE console
@@ -76,14 +80,14 @@ start:
 
 
 ; =============================================
-; summer(?,
+; summer(dword... val)
 ; 
 ; Input:
-;   ?
+;   0 or more dwords
 ; Output:
-;   ?
+;   eax = i0 + i1 + ... + iN
 ; Operation:
-;   ?
+;   Sums the input
 summer:
     push    ecx     ; Keep registers to the stack.
     push    edi
