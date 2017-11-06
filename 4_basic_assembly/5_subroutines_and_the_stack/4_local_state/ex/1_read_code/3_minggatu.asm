@@ -20,9 +20,22 @@
 ;
 ;       Fill in briefly the Input, Output and Operation comments for every
 ;       function in the code.
+;       For each index: (1 being the initial state)
+;       Walks previous numbers left-to-right and right-to-left, multiplying values at the current indicies together
+;       and summing the results to get the value at the next index
+;
+;       [0] = 1
+;       [1] = 1*1 = 1
+;       [2] = 1*1 + 1*1 = 2                     (2 + 2) / 2 = 2
+;       [3] = 1*2 + 1*1 + 2*1 = 5               (3 + 2) / 2 + (3 + 3) / 3 = (5 * 3 + 6 * 2) / 6 = 15 + 12 / 6 = 27 / 6
+;       [4] = 1*5 + 1*2 + 2*1 + 5*1 = 14 (e)
+;       ...
 ;
 ; 4.    Bonus: What is the meaning of the output numbers? Can you find a closed
 ;       formula for those numbers?
+;
+;       https://en.wikipedia.org/wiki/Catalan_number (it appears the product notation is incorrect, see above and below)
+;       http://mathworld.wolfram.com/CatalanNumber.html
 ;
 
 format PE console
@@ -59,11 +72,11 @@ start:
 ; calc_num(index)
 ;
 ; Input:
-;   ?
+;   index
 ; Output:
-;   ?
+;   element at index
 ; Operation:
-;   ?
+;   compute the element at the given index
 ;
 calc_num:
     .index = 8
@@ -74,13 +87,13 @@ calc_num:
     push    esi
     push    ebx
 
-    mov     ecx,dword [ebp + .index]
-    lea     ebx,[4*ecx]
-    sub     esp,ebx
-    mov     esi,esp
+    mov     ecx,dword [ebp + .index]    ; copy index arg into ECX
+    lea     ebx,[4*ecx + 4]             ; !! THIS LINE HAD A BUG [4*ecx] vs [4*ecx + 4], and was corrupting EBX on the stack
+    sub     esp,ebx                     ; ESP -= 4 * (index + 1) (make enough room on stack for array with 'index+1' elements)
+    mov     esi,esp                     ; ESI = ESP (start of array)
 
-    xor     ebx,ebx
-    mov     eax,1
+    xor     ebx,ebx                     ; EBX = 0
+    mov     eax,1                       ; EAX = 1
 
 .calc_next_num:
     ; Store the result into the array:
@@ -89,6 +102,7 @@ calc_num:
     inc     ebx
     push    ebx
     push    esi
+
     call    calc_next
     add     esp,4*2
 
@@ -96,7 +110,7 @@ calc_num:
     jb      .calc_next_num
     
     mov     ecx,dword [ebp + .index]
-    lea     ebx,[4*ecx]
+    lea     ebx,[4*ecx+4]   ; !! Updated from bugfix
     add     esp,ebx
 
     pop     ebx
@@ -110,11 +124,11 @@ calc_num:
 ; calc_next(arr_addr,arr_len)
 ;
 ; Input:
-;   ?
+;   array pointer, array len
 ; Output:
-;   ?
+;   none
 ; Operation:
-;   ?
+;   calcualtes the value for the current index and stores it in the array
 ;
 calc_next: 
     .arr_addr = 8
@@ -128,20 +142,20 @@ calc_next:
     push    edi
     push    edx
 
-    mov     ecx,dword [ebp + .arr_len]
+    mov     ecx,dword [ebp + .arr_len]      ; ecx = arr len
     jecxz   .arr_len_zero
-    mov     esi,dword [ebp + .arr_addr]
-    mov     edi,dword [ebp + .arr_addr]
-    lea     edi,[edi + 4*ecx - 4]
+    mov     esi,dword [ebp + .arr_addr]     ; esi = pLeft
+   ;mov     edi,dword [ebp + .arr_addr]     ; edi = arr ptr
+    lea     edi,[esi + 4*ecx - 4]           ; edi = pRight = &arr[len-1]
 
-    xor     ebx,ebx
+    xor     ebx,ebx                         ; ebx = 0
 .next_mul:
-    mov     eax,dword [esi]
-    mul     dword [edi]
-    add     ebx,eax
-    add     esi,4
-    sub     edi,4
-    loop    .next_mul
+    mov     eax,dword [esi]                 ; eax = *pLeft
+    mul     dword [edi]                     ; eax *= *pRight
+    add     ebx,eax                         ; ebx += *pLeft * *pRight
+    add     esi,4                           ; ++pLeft
+    sub     edi,4                           ; --pRight
+    loop    .next_mul                       ; --ecx
 
     mov     eax,ebx
     jmp     .end_func

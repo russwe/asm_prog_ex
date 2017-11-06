@@ -28,6 +28,10 @@
 ; 5.    Bonus: What is the complexity of this algorithm? How many invocations of
 ;       stein are expected for an initial pair of numbers (a,b)?
 ;
+;       O(n^2)
+;
+;       https://en.wikipedia.org/wiki/Binary_GCD_algorithm
+;
 
 format PE console
 entry start
@@ -48,12 +52,15 @@ start:
 
     ; Read two numbers:
     call    read_hex
-    mov     edx,eax
+;   mov     edx,eax
+    push    eax
+
     call    read_hex
+    push    eax
 
     ; Calculate result:
-    push    eax
-    push    edx
+;   push    eax
+;   push    edx
     call    stein
     add     esp,2*4
 
@@ -70,66 +77,74 @@ start:
 ; stein(a,b)
 ;
 ; Input:
-;   ?
+;   a: int dword
+;   b: int dword
 ; Output:
-;   ?
+;   eax: ?
 ; Operations:
 ;   ?
 ;
 stein:
-    .a = 8
+    .a = 8                      ; Local Variable Offsets from EBP
     .b = 0ch
-    enter   0,0
-    push    esi
+    enter   0,0                 ; Establish Frame
+    push    esi                 ; Save Register State
     push    edi
     push    ecx
     push    ebx
 
-    mov     esi,[ebp + .a]
-    mov     edi,[ebp + .b]
+    mov     esi,[ebp + .a]      ; esi = a
+    mov     edi,[ebp + .b]      ; edi = b
 
-    mov     eax,esi
+    mov     eax,esi             ; eax = a
     test    edi,edi
-    jz      .end_func
+    jz      .end_func           ; b == 0 -> end     // eax = a
 
-    mov     eax,edi
+    mov     eax,edi             ; eax = b
     test    esi,esi
-    jz      .end_func
-
-    xor     ebx,ebx
-
-    mov     ecx,esi
-    not     ecx
-    and     ecx,1
-    shr     esi,cl
-    add     ebx,ecx
-
-    mov     ecx,edi
-    not     ecx
-    and     ecx,1
-    shr     edi,cl
-    add     ebx,ecx
-
-    test    ebx,ebx
-    jnz     .not_both_odd
+    jz      .end_func           ; a == 0 -> end     // eax = b
 
     cmp     esi,edi
-    jae     .a_bigger_equal
-    xchg    esi,edi         ; Exchanges the contents of esi,edi
+    jz      .end_func           ; a == b -> end     // eax = b
+
+    xor     ebx,ebx             ; zero ebx
+
+    mov     ecx,esi             ; ecx = a
+    not     ecx                 ; ecx = ~a
+    and     ecx,1               ; ecx = ~a && 1                 // ecx = 0, odd; 1, otherwise
+    shr     esi,cl              ; esi = as = a >> (~a && 1)     // shift 'a' right by 0 or 1
+    add     ebx,ecx             ; ebx = 0, if ecx low bit was 1 (odd); 1, otherwise (even)
+
+    mov     ecx,edi             ; ecx = b
+    not     ecx                 ; ecx = ~b
+    and     ecx,1               ; ecx = ~b && 1                 // ecx = 0, odd; 1, otherwise
+    shr     edi,cl              ; edi = bs = b >> (~b && 1)     // shift 'b' right by 0 or 1
+    add     ebx,ecx             ; ebx = 0, both odd; 1, only one even; 2, both even
+
+    test    ebx,ebx
+    jnz     .not_both_odd       ; ebx != 0 -> .not_both_odd
+
+    cmp     esi,edi
+    jae     .a_bigger_equal     ; a >= b -> .a_bigger_equal
+    xchg    esi,edi             ; Exchanges the contents of esi,edi (if b > a)
 .a_bigger_equal:
 
-    sub     esi,edi
-    shr     esi,1
+    sub     esi,edi             ; esi = max(a,b) - min(a,b)     // neither 'a' nor 'b' have been shifted (both were odd)
+    shr     esi,1               ; esi >>= 1
 .not_both_odd:
     
-    push    edi
-    push    esi
-    call    stein
-    add     esp,4*2
+    push    edi                 ; a = bs || min(a,b)
+    push    esi                 ; b = as || (max(a,b) - min(a,b)) >> 1
+    call    stein               ; recursively call stein
+    add     esp,4*2             ; clean up stack
 
-    mov     ecx,ebx
-    shr     ecx,1
-    shl     eax,cl
+    mov     ecx,ebx             ; ecx = 0, if both were odd; 1, if only one was even; 2, if both were even
+    shr     ecx,1               ; ecx >>= 1     // 1, if both were even; else 0
+    shl     eax,cl              ; eax = a, if b == 0    // terminating state
+                                ;       b, if a == 0    // terminating state
+                                ;       b, if a == b    // terminating state
+                                ;       r << 1, if a & b were both even
+                                ;       r, otherwise
 
 .end_func:
     pop     ebx

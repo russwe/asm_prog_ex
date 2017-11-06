@@ -24,9 +24,12 @@
 ; 4.    How can you reverse the final output of the program, with minimum amount
 ;       of changes to the code below?
 ;
+;       Requires swap of one instruction in the 'compare_and_swap' method.
+;
 ; 5.    What is the complexity of this algorithm? (How many operations does it
 ;       take to execute this algorithm for an array of size N elements?)
 ;
+;       O(n^2), every array element is compared to every other array element
 
 format PE console
 entry start
@@ -76,11 +79,11 @@ start:
 ; print_arr(arr_addr,arr_len)
 ;
 ; Input:
-;   ?
+;   array pointer, array len
 ; Output:
-;   ?
+;   none
 ; Operation:
-;   ?
+;   prints array values to screen
 ;
 print_arr:
     .arr_addr = 8h
@@ -112,11 +115,11 @@ print_arr:
 ; sort_arr(arr_addr,arr_len)
 ;
 ; Input:
-;   ?
+;   array pointer, array len
 ; Output:
-;   ?
+;   none
 ; Operation:
-;   ?
+;   sorts the array entries in-place via calls to compare_and_sort
 ;
 sort_arr:
     .arr_addr = 8h
@@ -162,11 +165,11 @@ sort_arr:
 ; compare_and_swap(x_addr,y_addr)
 ;
 ; Input:
-;   ?
+;   x pointer, y pointer
 ; Output:
-;   ?
+;   none
 ; Operation:
-;   ?
+;   compares values in two addresses, and calls swap if needed
 ;
 compare_and_swap:
     .x_addr = 8h
@@ -182,7 +185,7 @@ compare_and_swap:
     mov     edi, dword [ebp + .y_addr]
     mov     eax, dword [esi]
     cmp     eax,dword [edi]
-    jae     .x_above_equal
+    jae     .x_above_equal      ; !! swap instruction to jbe to reverse sort
     ; We only swap in the case where y > x:
     push    edi
     push    esi
@@ -201,11 +204,11 @@ compare_and_swap:
 ; swap(x_addr,y_addr)
 ;
 ; Input:
-;   ?
+;   x pointer, y pointer
 ; Output:
-;   ?
+;   none
 ; Operation:
-;   ?
+;   unconditionally swaps the values in the two memory addresses
 ;
 swap:
     .x_addr = 8h

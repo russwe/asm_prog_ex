@@ -22,6 +22,11 @@
 ;       printed to the console.
 ;       Carefully understand what happens to the stack.
 ;
+;       call .skip pushes the return address (next EIP value) onto the stack
+;       the return address just so happens to be the start of the string to print
+;       therefore the call to the print method keeps that address as its arg1
+;       and the string is printed out.
+;
 
 format PE console
 entry start
@@ -33,12 +38,12 @@ section '.text' code readable executable
 
 start:
 
-    call    .skip               ; ?!
+    call    .skip               ; pushes return address onto stack (start of string)
     db      'Living in the text section',13,10
     db      '   my life is not a life...',13,10,0
 .skip:
-    call    print_str2
-    add     esp,4
+    call    print_str2          ; arg1 = start of string
+    add     esp,4               ; remove arg1 from the stack
 
     ; Exit the process:
 	push	0
