@@ -48,11 +48,18 @@ start:
 
     ; Read two numbers:
     call    read_hex
+    call    print_eax
     mov     edx,eax
     call    read_hex
+    call    print_eax
 
     ; Calculate result:
     push    eax
+    call    print_eax
+
+    mov     eax,edx
+    call    print_eax
+
     push    edx
     call    stein
     add     esp,2*4
