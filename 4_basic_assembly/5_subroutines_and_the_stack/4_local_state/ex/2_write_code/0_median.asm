@@ -121,67 +121,156 @@ qsort:
     push    ebp
     mov     ebp, esp
 
-    push    eax     ; left value
-    push    ebx     ; pivot value
-    push    edx     ; right value
+    push    eax     ; ptr left pivot partition
+    push    ebx     ; ptr right pivot patition
+    push    ecx     ; pivot value ; pivot-to-middle counter
+    push    edx     ; cmp value
     push    esi     ; ptr left  (low)
     push    edi     ; ptr right (high)
 
+    mov     esi, szNewLine  ; !
+    call    print_str       ; !
+
     mov     esi, [ebp + .left]
     mov     edi, [ebp + .right]
+
+    mov     eax, esi    ; !
+    call    print_eax   ; !
+    mov     eax, edi    ; !
+    call    print_eax   ; !
 
     cmp     esi, edi
     jae     .terminate
 
-    mov     ebx, [esi]
-
 .partition:
-    sub     esi, 4
+    ; select pivot value
+    mov     ebx, edi
+    sub     ebx, esi
+    shr     ebx, 1
+    and     ebx, 0fffffffch
+    add     ebx, esi
+    mov     ecx, [ebx]
+
+    ; swap pivot to left end
+    mov     eax, [esi]
+    mov     [ebx], eax
+    mov     [esi], ecx
+
+    mov     eax, esi ; don't update left pointer (pre-increment in loop)
+
+    ; shift right pointer out-of-bounds (pre-decrement in loop)
     add     edi, 4
+    mov     ebx, edi
 
 .moveRight:
     add     esi, 4
-    mov     eax, [esi]
-
-    cmp     eax, ebx
+    cmp     [esi], ecx
     jb      .moveRight
 
 .moveLeft:
-    sub     edi, 4   
-    mov     edx, [edi]
-
-    cmp     edx, ebx
+    sub     edi, 4
+    cmp     [edi], ecx
     ja      .moveLeft
 
 .swap:
     cmp     esi, edi
-    jae     .recurse
+    jae     .pivot2middle
 
-    mov     [esi], edx
-    mov     [edi], eax
+    ; Swap
+    push    dword [esi]
+    push    dword [edi]
+    pop     dword [esi]
+    pop     dword [edi]
 
-    jmp .moveRight
+.maybeSwapLeft:
+    cmp     [esi], ecx
+    jne     .maybeSwapRight
+
+    add     eax, 4
+    
+    ; Swap
+    push    dword [eax]
+    push    dword [esi]
+    pop     dword [eax]
+    pop     dword [esi]
+
+.maybeSwapRight:
+    cmp     [edi], ecx
+    jne     .moveRight
+
+    sub     ebx, 4
+    
+    ; Swap
+    push    dword [ebx]
+    push    dword [edi]
+    pop     dword [ebx]
+    pop     dword [edi]
+
+    jmp     .moveRight
+
+.pivot2middle:
+    ; Move pivot values to middle
+    cmp     esi, edi
+    je      .eq         ; invariant: cannot be below
+
+    xchg    esi, edi
+    jmp     .goLeft
+.eq:
+    push    dword [eax]
+    push    dword [esi]
+    pop     dword [eax]
+    pop     dword [esi]
+
+    sub     eax, 4
+    sub     esi, 4
+    add     edi, 4    
+
+.goLeft:
+    mov     ecx, [ebp + .left]
+.left2middle:
+    cmp     eax, ecx
+    jb      .goRight
+
+    push    dword [eax]
+    push    dword [esi]
+    pop     dword [eax]
+    pop     dword [esi]
+
+    sub     eax, 4
+    sub     esi, 4
+    jmp     .left2middle
+
+.goRight:
+    mov     ecx, [ebp + .right]
+.right2middle:
+    cmp     ebx, ecx
+    ja      .recurse
+
+    push    dword [ebx]
+    push    dword [edi]
+    pop     dword [ebx]
+    pop     dword [edi]
+
+    add     ebx, 4
+    add     edi, 4
+    jmp     .right2middle
 
 .recurse:
-    mov     ebx, edi
-    mov     esi, [ebp + .left]
-    mov     edi, [ebp + .right]
-
     ; sort left
-    push    ebx     ; right (pivot)
-    push    esi     ; left
+    push    esi         ; right (pivot-left)
+    push    dword [ebp + .left]
     call    qsort
 
     ; sort right
-    push    edi     ; right
-    add     ebx, 4
-    push    ebx     ; left (pivot + 4)
+    push    dword [ebp + .right]
+    push    edi         ; left (pivot-right)
     call    qsort
 
 .terminate:
     pop     edi
     pop     esi
     pop     edx
+    pop     ecx
     pop     ebx
     pop     eax
 
