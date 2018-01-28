@@ -92,8 +92,18 @@ is_in_array:
     push    ebp
     mov     ebp,esp
 
+    ; ! Really should save register state, but not actually required here
+    ; eax: middle index | ret 0, if no match; 1, otherwise
+    ; ebx: comparison value
+    ; ecx: start array pointer
+    ; esi: left index
+    ; edi: right index
+
+    mov     ebx,dword [ebp + .x]
+    mov     ecx,dword [ebp + .array]
     xor     esi,esi
     mov     edi,dword [ebp + .arr_len]
+    dec     edi
 
 .next_iter:
     ; Check if the search has ended:
@@ -101,31 +111,32 @@ is_in_array:
     cmp     esi,edi
     ja      .end_func
 
-    ; Get the middle point of the array:
-    mov     eax,esi
-    add     eax,edi
+    ; Get the middle index of the partition:
+    mov     eax,edi
+    sub     eax,esi
     shr     eax,1
+    add     eax,esi
 
-    mov     ecx,dword [ebp + .array]
     mov     edx,[ecx + 4*eax]
 
-    cmp     dword [ebp + .x],edx
-    jnz     .no_match
+    cmp     ebx,edx
+    ja      .too_big
+    jb      .too_small
 
     ; We have a match here:
     xor     eax,eax
     inc     eax
     jmp     .end_func
 
-.no_match:
-    ja      .too_big
+.too_small:
     ; We are here if the number is too small:
     mov     edi,eax
-    jmp     .prep_next_iter
+    dec     edi
+    jmp     .next_iter
 .too_big:
     ; We are here if the number is too big:
     mov     esi,eax
-.prep_next_iter:
+    inc     esi
     jmp     .next_iter
 
 .end_func:

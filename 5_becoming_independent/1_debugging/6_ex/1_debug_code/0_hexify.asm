@@ -89,7 +89,7 @@ str_to_dec_num:
     push    ecx
 
     xor     ecx,ecx
-    mov     esi,.num_str
+    mov     esi, [ebp + .num_str]
 
 .read_char:
     lodsb

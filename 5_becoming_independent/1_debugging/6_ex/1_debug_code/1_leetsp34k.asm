@@ -91,6 +91,7 @@ transform_leet:
     ; Not a null char:
     push    esi
     call    transform_leet_char
+    add     esp, 4
     inc     esi     ; Get next character.
     jmp     .next_char
 .found_null:

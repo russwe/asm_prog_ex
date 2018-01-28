@@ -22,6 +22,8 @@
 ; password and finally prints back a message to the user regarding the success
 ; of the login attempt.
 
+; One valid input: 4b140000
+
 format PE console
 entry start
 
